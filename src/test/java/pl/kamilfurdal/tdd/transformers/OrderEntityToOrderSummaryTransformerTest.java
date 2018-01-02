@@ -2,6 +2,7 @@ package pl.kamilfurdal.tdd.transformers;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import pl.kamilfurdal.tdd.models.OrderEntity;
 import pl.kamilfurdal.tdd.models.OrderItemEntity;
@@ -32,20 +33,23 @@ public class OrderEntityToOrderSummaryTransformerTest {
         orderEntityFixture.setOrderNumber(orderNumberFixture);
         orderEntityFixture.setOrderItemList(new LinkedList<OrderItemEntity>());
 
+
         //when
+
         OrderItemEntity itemFixture1 = new OrderItemEntity();
-        itemFixture1.setQuantity(1);
-        itemFixture1.setSellingPrice(new BigDecimal("10.00"));
+        itemFixture1.setQuantity(2);
+        itemFixture1.setSellingPrice(new BigDecimal("6.00"));
         orderEntityFixture.getOrderItemList().add(itemFixture1);
 
         OrderItemEntity itemFixture2 = new OrderItemEntity();
-        itemFixture2.setQuantity(2);
+        itemFixture2.setQuantity(1);
         itemFixture2.setSellingPrice(new BigDecimal("2.00"));
         orderEntityFixture.getOrderItemList().add(itemFixture2);
 
         OrderSummary result = target.transform(orderEntityFixture);
 
         //then
+
         Assert.assertNotNull(result);
         Assert.assertEquals(orderNumberFixture, result.getOrderNumber());
         Assert.assertEquals(3, result.getItemCount());
@@ -61,7 +65,6 @@ public class OrderEntityToOrderSummaryTransformerTest {
 
     @Test
     public void testTransformNoItemsInOrder(){
-
         String orderNumberFixture = UUID.randomUUID().toString();
 
         OrderEntity orderEntityFixture = new OrderEntity();
@@ -71,9 +74,9 @@ public class OrderEntityToOrderSummaryTransformerTest {
         OrderSummary result = target.transform(orderEntityFixture);
 
         Assert.assertNotNull(result);
+        Assert.assertEquals(orderNumberFixture, result.getOrderNumber());
         Assert.assertEquals(0, result.getItemCount());
         Assert.assertEquals(new BigDecimal("0.00"), result.getTotalAmount());
 
     }
-
 }
